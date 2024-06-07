@@ -1,6 +1,7 @@
 package friends;
 
 import java.util.ArrayList;
+
 import structures.Queue;
 import structures.Stack;
 
@@ -107,16 +108,31 @@ public class Friends {
 					if (cliques.get(i).contains(friend.name)){
 						cliques.get(i).add(person.name);
 						if (prev != -1){
-							cliques.get(prev).addAll(cliques.remove(i));
+							ArrayList<String> prevA = cliques.get(prev);
+							prevA.addAll(cliques.remove(i));
 							i--;
 						}
 						prev = i;
 					}
 				}
+
+				if (prev == -1){
+					ArrayList<String> obj = new ArrayList<>();
+					obj.add(person.name);
+					cliques.add(obj);
+				}
 				f = f.next;
 			}
 		}
-		return cliques;
+		ArrayList<ArrayList<String>> dedupeCliques= new ArrayList<>();
+		for (ArrayList<String> clique : cliques) {
+			ArrayList<String> strings = new ArrayList<>();
+			for (String s: clique) {
+				if (!strings.contains(s)) strings.add(s);
+			}
+			dedupeCliques.add(strings);
+		}
+		return dedupeCliques;
 	}
 	
 	/**
@@ -126,8 +142,47 @@ public class Friends {
 	 * @return an ArrayList of names of all connectors. null if there are no connectors.
 	 */
 	public static ArrayList<String> connectors(Graph g) {
-		/** COMPLETE THIS METHOD **/
-		return null;
+		int baseline = numGroups(g, "");
+		ArrayList<String> connectors = new ArrayList<>();
+		for (Person person:
+			 g.members) {
+			if (baseline != numGroups(g, person.name) && person.first != null && person.first.next !=null) connectors.add(person.name);
+		}
+		return connectors;
+	}
+
+	private static int numGroups(Graph g, String avoid){
+		ArrayList<ArrayList<String>> cliques= new ArrayList<>();
+		for( Person person:g.members){
+			if (person.name.equals(avoid)) continue;
+			Friend f = person.first;
+			boolean inserted = false;
+			while(f != null) {
+				Person friend = g.members[f.fnum];
+
+				int prev = -8;
+				for (int i = 0; i < cliques.size(); i++) {
+
+					if (cliques.get(i).contains(friend.name) || cliques.get(i).contains(person.name)){
+						cliques.get(i).add(person.name);
+						inserted = true;
+						if (prev != -8){
+							ArrayList<String> prevA = cliques.get(prev);
+							prevA.addAll(cliques.remove(i));
+							i--;
+						}
+						prev = i;
+					}
+				}
+				f = f.next;
+			}
+			if (!inserted){
+				ArrayList<String> obj = new ArrayList<>();
+				obj.add(person.name);
+				cliques.add(obj);
+			}
+		}
+		return cliques.size();
 	}
 }
 

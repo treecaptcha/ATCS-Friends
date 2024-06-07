@@ -30,9 +30,11 @@ public class FriendsApp {
 				System.out.println("No chain exists from " + p1 + " to " + p2);
 			}
 			// ADD a test for Friends.cliques() here
-
+			System.out.println(Friends.cliques(g, "rutgers"));
 			// ADD a test for Friends.connectors() here
-			
+			System.out.println(Friends.connectors(g));
+
+
 		} 
 		catch (FileNotFoundException e) {
 			System.out.println(filename + " not found");
