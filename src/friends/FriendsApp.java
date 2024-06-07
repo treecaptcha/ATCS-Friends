@@ -11,8 +11,8 @@ public class FriendsApp {
 		// Update p1 and p2 to refer to people on Graph g
 		// sam and sergei are from sampleGraph.txt
 		String filename = "sampleGraph.txt";
-		String p1 = "sam";
-		String p2 = "sergei";
+		String p1 = "nick";
+		String p2 = "samir";
 		
 		System.out.printf("Testing shortestChain from %s to %s on graph %s.\n", p1, p2, filename);
 
